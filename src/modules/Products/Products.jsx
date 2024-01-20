@@ -1,24 +1,30 @@
 import React, {useEffect, useState}from 'react';
 import ProductsCard from '../../components/ProductsCard/ProductsCard';
 import FeatureCard from '../../components/FeatureCard/FeatureCard';
-
+import data from '../../components/data/data';
 
 const Products = () => {
-    const [categories, setCategories] = useState([])
-    useEffect(()=>{
-        const fetchCategories = async () =>{
-            const response = await fetch ('https://fakestoreapi.com/products/categories')
-            const data = await response.json()
-            console.log(data)
-            setCategories(data)
-        }
-        fetchCategories()
-    }, [])
-    if (categories.length === 0) return <div>Loading...</div>
+    // Obtén las categorías únicas de tu array de datos
+    const uniqueCategories = Array.from(new Set(data.map(item => item.category)));
+    const [categories, setCategories] = useState(uniqueCategories);
+    const [selectedCategory, setSelectedCategory] = useState('Todas'); // Inicialmente selecciona todas las categorías
+    // Este useEffect podría no ser necesario, dependiendo de tu aplicación
+    useEffect(() => {
+        // Puedes realizar operaciones adicionales aquí si es necesario
+    }, [categories]);
+    const handleCategoryChange = (category) => {
+        setSelectedCategory(category);
+    };
+    if (categories.length === 0) return <div>Loading...</div>;
+    // Filtra los productos según la categoría seleccionada
+    const filteredProducts = selectedCategory === 'Todas'
+        ? data
+        : data.filter(product => product.category === selectedCategory);
+
     return (
         <div>
-            <FeatureCard card={categories}/>
-            <ProductsCard/>
+            <FeatureCard card={categories} onCategoryChange={handleCategoryChange} />
+            <ProductsCard products={filteredProducts} />
         </div>
     );
 };

@@ -3,17 +3,14 @@ import Hero from '../../components/Hero/Hero';
 import ProductsCard from '../../components/ProductsCard/ProductsCard';
 import FeatureCard from '../../components/FeatureCard/FeatureCard';
 import Products from '../Products/Products';
+import data from '../../components/data/data';
 const Home = () => {
-    const [products, setProducts] = useState([])
-    useEffect(()=>{
-        const fetchProducts = async () =>{
-            const response = await fetch ('https://fakestoreapi.com/products')
-            const data = await response.json()
-            console.log(data)
-            setProducts(data)
-        }
-        fetchProducts()
-    }, [])
+    const [products, setProducts] = useState([]);
+
+    // En lugar de hacer la llamada a la API, simplemente asignamos el array de datos
+    useEffect(() => {
+        setProducts(data);
+    }, []);
     return (
         <div>
             <Hero/>
@@ -24,8 +21,7 @@ const Home = () => {
                 :
                 <div> Loading...</div>
             }
-            <Products/>
-            <FeatureCard/>
+            
         </div>
     );
 };
